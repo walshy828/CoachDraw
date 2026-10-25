@@ -1,0 +1,17 @@
+services:
+  coachdraw:
+    build: .
+    image: coachdraw:latest
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:3000"
+    environment:
+      # Generate with: openssl rand -hex 32
+      SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET in .env (see .env.example)}
+      # Set to "true" when serving over HTTPS
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+    volumes:
+      - coachdraw-data:/data
+
+volumes:
+  coachdraw-data:
