@@ -19,9 +19,10 @@ COPY --from=build /app/dist ./dist
 COPY package.json tsconfig.json ./
 COPY shared ./shared
 COPY server ./server
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN mkdir -p /data && chown node:node /data
-USER node
 VOLUME /data
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s CMD node -e "fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["npx", "tsx", "server/index.ts"]
